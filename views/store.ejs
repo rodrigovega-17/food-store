@@ -4,6 +4,7 @@
         <title>FOODSIE | MENU</title>
         <meta name="description" contet="this is the description">
         <link rel="stylesheet" href="styles.css">
+        <link href="https://emoji-css.afeld.me/emoji.css" rel="stylesheet">
         <script src="https://checkout.stripe.com/checkout.js" defer></script>
         <script>
             var stripePublicKey = "<%= stripePublicKey %>"
@@ -27,13 +28,13 @@
             <h2 class="section-header">PLATILLOS</h2>
                 <div class="shop-items">
 
-                    <% items.music.forEach(function(item) {  %>
+                    <% items.food.forEach(function(item) {  %>
                 <div class="shop-item" data-item-id="<%= item.id %>">
                         <span class="shop-item-title"><%= item.name %></span>
                     <img class="shop-item-image" src="Images/<%= item.imgName %>">
                     <div class="shop-item-details">
-                        <span class="shop-item-price"><%= item.price / 100%></span>
-                        <button class="btn btn-primary shop-item-button" type="button">ADD TO CART</button>
+                        <span class="shop-item-price">$<%= item.price / 100%></span>
+                        <button class="btn btn-primary shop-item-button" type="button">AÑADIR A CARRITO <i class="em em-drooling_face" aria-role="presentation" aria-label="DROOLING FACE"></i></button>
                     </div>
                 </div>
                 <% }) %>
@@ -45,13 +46,13 @@
             <h2  class="section-header">BEBIDAS</h2>
 
             <div class="shop-items">
-                <% items.merch.forEach(function(item) {  %>
+                <% items.drinks.forEach(function(item) {  %>
                     <div class="shop-item" data-item-id="<%= item.id %>">
                             <span class="shop-item-title"><%= item.name %></span>
                         <img class="shop-item-image" src="Images/<%= item.imgName %>">
                         <div class="shop-item-details">
-                            <span class="shop-item-price"><%= item.price / 100%></span>
-                            <button class="btn btn-primary shop-item-button" type="button">ADD TO CART</button>
+                            <span class="shop-item-price">$<%= item.price / 100%></span>
+                            <button class="btn btn-primary shop-item-button" type="button">AÑADIR A CARRITO</button>
                         </div>
                     </div>
                     <% }) %>
@@ -76,7 +77,7 @@
                 <span class="cart-total-price">$0</span>
             </div>
 
-            <button class="btn btn-primary btn-purchase" type="button">PEDIR</button>
+            <button class="btn btn-primary btn-purchase" type="button">PEDIR YA, ¡PERO YA! <i class="em em-scream" aria-role="presentation" aria-label="FACE SCREAMING IN FEAR"></i></button>
 
             
         </section>
