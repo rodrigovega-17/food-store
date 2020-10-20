@@ -1,0 +1,42 @@
+{
+    "food": [
+      {
+        "id": 1,
+        "name": "Chicken Classic",
+        "price": 1299,
+        "imgName": "classic-chicken.png"
+      },
+      {
+        "id": 2,
+        "name": "Chicken waffles",
+        "price": 1499,
+        "imgName": "chicken-waffle.png"
+      },
+      {
+        "id": 3,
+        "name": "The sinner",
+        "price": 999,
+        "imgName": "sinner-double.png"
+      },
+      {
+        "id": 4,
+        "name": "Healthy Yummy",
+        "price": 1999,
+        "imgName": "healthy-yummy.png"
+      }
+    ],
+    "drinks": [
+      {
+        "id": 5,
+        "name": "Coca-Cola bien fría",
+        "price": 1999,
+        "imgName": "coca.jpg"
+      },
+      {
+        "id": 6,
+        "name": "Cervecita BocaNegra",
+        "price": 699,
+        "imgName": "bocanegra.png"
+      }
+    ]
+  }

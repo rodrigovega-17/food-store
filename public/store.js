@@ -1,3 +1,5 @@
+
+
 if (document.readyState == "loading"){
     document.addEventListener("DOMContentLoaded", ready)
 } else {
@@ -124,7 +126,7 @@ function addItemToCart(title, price, imageSrc, id) {
     <span class="cart-price cart-column">${price}</span>
     <div class="cart-quantity cart-column">
         <input class="cart-quantity-input" type="number" value="1">
-        <button class="btn btn-danger" type="button">REMOVE</button>
+        <button class="btn btn-danger" type="button">QUITAR <i class="em em-disappointed_relieved" aria-role="presentation" aria-label="DISAPPOINTED BUT RELIEVED FACE"></i></button>
     </div>`
     cartRow.innerHTML = cartRowcontents
     cartItems.append(cartRow)
