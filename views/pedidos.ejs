@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>FOODSIE | MENU</title>
+        <meta name="description" contet="this is the description">
+        <link rel="stylesheet" href="styles.css">
+        <link href="https://emoji-css.afeld.me/emoji.css" rel="stylesheet">
+        <script src="https://checkout.stripe.com/checkout.js" defer></script>
+        <script>
+        </script>
+    </head>
+    <body>
+        <header class="main-header">
+            <nav class="main-nav nav">
+                <ul>
+                    <li> <a href="index.html">INICIO</a></li>
+                    <li> <a href="store">MENU</a></li>
+                    <li> <a href="about.html">NOSOTROS</a></li>
+                </ul>
+            </nav>
+            <h1 class="rest-name rest-name-large">FOODSIE</h1>
+        </header>
+        <section class="container content-section">
+            <h2 class="section-header">PEDIDOS</h2>
+                <div>
+                    <% pedidos.forEach(function(item) {  %>
+                        <hr>
+                <div class="shop-item" data-item-id="<%= item.id %>">
+                        <p class="shop-item-title"><%= item.id %></p>
+                    <div class="shop-item-details">
+                        <% item.items.forEach(function(item1) {  %>
+                            <p>id = <%= item1.id %></p><br>
+                            <p>Cantidad = <%= item1.quantity %></p>
+                            <br>
+
+                        <% }) %>
+                        <p>Datos usuarios = <%= item.usuario %></p><br>
+                        <p class="shop-item-price">$<%= item.total / 100%></p><br>
+                    </div>
+                </div>
+                <% }) %>
+            </div>
+
+        </section>
+
+     
+
+
+
+        <footer class="main-footer">
+            <div class="container main-footer-container">
+                <h3 class="rest-name">FOODSIE</h3>
+                <ul class="nav footer-nav">
+                    <li><img src="Images/YouTube Logo.png"></li>
+                    <li><img src="Images/Spotify Logo.png"></li>
+                    <li><img src="Images/Facebook Logo.png"></li>
+                </ul>
+            </div>
+        </footer>
+    </body>
+</html>
+    </body>
+</html>
