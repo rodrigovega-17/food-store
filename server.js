@@ -25,16 +25,17 @@ MongoClient.connect(url, function (err, db) {
   }
   var dbo = db.db("foodstore");
 
-  app.get("/store", function (req, res) {
-    fs.readFile("items.json", function (error, data) {
-      if (error) {
-        res.status(500).end();
-      } else {
-        res.render("store.ejs", {
-          stripePublicKey: stripePublicKey,
-          items: JSON.parse(data),
-        });
-      }
+  app.get("/store", async function (req, res) {
+    let datos = {
+      food: "",
+      drinks: "",
+    };
+    datos["food"] = await getDatos("food");
+    datos["drinks"] = await getDatos("beverage");
+    console.log(datos);
+    res.render("store.ejs", {
+      stripePublicKey: stripePublicKey,
+      items: datos,
     });
   });
 
@@ -42,17 +43,39 @@ MongoClient.connect(url, function (err, db) {
     dbo.collection("pedidos").insertOne(data);
   }
 
+  function getDatos(collection) {
+    return new Promise((resolve, reject) =>
+      dbo
+        .collection(collection)
+        .find()
+        .toArray(function (err, result) {
+          if (err) {
+            reject(err);
+          }
+          resolve(result);
+        })
+    );
+  }
+  function findDatos(data) {
+    return new Promise((resolve, reject) =>
+      dbo
+        .collection(data.collection)
+        .find({ data: data.id })
+        .toArray(function (err, result) {
+          if (err) {
+            reject(err);
+          }
+          resolve(result);
+        })
+    );
+  }
+
   app.get("/pedidos", async function (req, res) {
-    dbo
-      .collection("pedidos")
-      .find()
-      .toArray(function (err, result) {
-        console.log(result);
-        console.log("tipo: ", typeof result);
-        res.render("pedidos.ejs", {
-          pedidos: result,
-        });
-      });
+    datos2 = await getDatos("pedidos");
+    console.log(datos2);
+    res.render("pedidos.ejs", {
+      pedidos: datos2,
+    });
   });
 
   app.post("/purchase", function (req, res) {
