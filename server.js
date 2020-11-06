@@ -12,9 +12,13 @@ const express = require("express");
 const app = express();
 const fs = require("fs");
 const stripe = require("stripe")(stripeSecretKey);
+const bodyParser = require("body-parser");
+const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
 
 app.set("view engine", "ejs");
 app.use(express.json());
+app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static("public"));
 
 var MongoClient = require("mongodb").MongoClient;
@@ -25,7 +29,11 @@ MongoClient.connect(url, function (err, db) {
   }
   var dbo = db.db("foodstore");
 
-  app.get("/store", async function (req, res) {
+  app.get("/", async function (req, res) {
+    res.sendFile("/public/login.html");
+  });
+
+  app.get("/store", auth, async function (req, res) {
     let datos = {
       food: "",
       drinks: "",
@@ -39,8 +47,8 @@ MongoClient.connect(url, function (err, db) {
     });
   });
 
-  function saveDB(data) {
-    dbo.collection("pedidos").insertOne(data);
+  function saveDB(data, collection) {
+    dbo.collection(collection).insertOne(data);
   }
 
   function getDatos(collection) {
@@ -56,19 +64,74 @@ MongoClient.connect(url, function (err, db) {
         })
     );
   }
+
   function findDatos(data) {
     return new Promise((resolve, reject) =>
       dbo
         .collection(data.collection)
-        .find({ data: data.id })
+        .find({ email: data.email })
         .toArray(function (err, result) {
           if (err) {
             reject(err);
+          } else {
+            console.log("result: ", result);
+            resolve(result);
           }
-          resolve(result);
         })
     );
   }
+
+  app.post("/login", async function (req, res) {
+    let query = {
+      collection: "users",
+      email: req.body.email,
+      password: req.body.password,
+    };
+    console.log(query);
+    const user = await findDatos(query);
+    //console.log("found: ", emailExist);
+    if (user.length == 0) {
+      return res.status(400).send("Email no existe");
+    }
+    const validPass = await bcrypt.compare(req.body.password, user[0].password);
+    if (!validPass) {
+      return res.status(400).send("Contraseña incorrecta");
+    }
+    const token = jwt.sign({ email: user.email }, process.env.TOKEN_SECRET);
+    console.log("token = ", token);
+    res.header("auth-token", token).send(token).render("pedidos", {
+      token,
+    });
+  });
+
+  function auth(req, res, next) {
+    const token = req.header("auth-token");
+    //const token = req.query.token;
+    console.log("token function = ", token);
+    console.log(req.header);
+    if (!token) {
+      return res.status(401).send("Access Denied");
+    }
+    try {
+      const verified = jwt.verify(token, process.env.TOKEN_SECRET);
+      req.user = verified;
+      next();
+    } catch (err) {
+      res.status(400);
+    }
+  }
+
+  app.post("/register", async function (req, res) {
+    const salt = await bcrypt.genSalt(10);
+    const hashPassword = await bcrypt.hash(req.body.password, salt);
+    let user = {
+      email: req.body.email,
+      password: hashPassword,
+      address: req.body.address,
+    };
+    saveDB(user, "users");
+    res.send("CREADO");
+  });
 
   app.get("/pedidos", async function (req, res) {
     datos2 = await getDatos("pedidos");
@@ -108,7 +171,7 @@ MongoClient.connect(url, function (err, db) {
               total: total,
               usuario: "testing",
             };
-            saveDB(dataPedido);
+            saveDB(dataPedido, "pedidos");
           })
           .catch(function () {
             console.log("Charge Fail");
