@@ -6,19 +6,13 @@
         <link rel="stylesheet" href="styles.css">
         <link href="https://emoji-css.afeld.me/emoji.css" rel="stylesheet">
         <script src="https://checkout.stripe.com/checkout.js" defer></script>
-        <%
-            <script>
-                let token = <%= token %>
-                localStorage.token = token
-            </script>
-        %>
     </head>
     <body>
         <header class="main-header">
             <nav class="main-nav nav">
                 <ul>
                     <li> <a href="index.html">INICIO</a></li>
-                    <li> <a href="store?token=<%= token %>">MENU</a></li>
+                    <li> <a href="store">MENU</a></li>
                     <li> <a href="about.html">NOSOTROS</a></li>
                     <li> <a href="pedidos">PEDIDOS</a></li>
                 </ul>
@@ -37,7 +31,6 @@
                             <p>id = <%= item1.id %></p><br>
                             <p>Cantidad = <%= item1.quantity %></p>
                             <br>
-
                         <% }) %>
                         <p>Datos usuarios = <%= item.usuario %></p><br>
                         <p class="shop-item-price">$<%= item.total / 100%></p><br>

@@ -30,7 +30,7 @@ MongoClient.connect(url, function (err, db) {
   var dbo = db.db("foodstore");
 
   app.get("/", async function (req, res) {
-    res.sendFile("/public/login.html");
+    res.sendFile("/public/login.html", { root: __dirname });
   });
 
   app.get("/store", auth, async function (req, res) {
