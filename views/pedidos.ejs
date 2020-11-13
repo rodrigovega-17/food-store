@@ -21,21 +21,25 @@
         </header>
         <section class="container content-section">
             <h2 class="section-header">PEDIDOS</h2>
-                <div>
+                
                     <% pedidos.forEach(function(item) {  %>
-                        <hr>
-                <div class="shop-item" data-item-id="<%= item.id %>">
-                        <p class="shop-item-title"><%= item.id %></p>
-                    <div class="shop-item-details">
+                        <div class="pedidos-forms"></div>
+                        <div class="cards" data-item-id="<%= item.id %>" >
                         <% item.items.forEach(function(item1) {  %>
-                            <p>id = <%= item1.id %></p><br>
-                            <p>Cantidad = <%= item1.quantity %></p>
+                            
+                            <span class="pedidos-item" > id = <%= item1.id %>   </span> 
+                            <span class="pedidos-item">Cantidad = <%= item1.quantity %></span> 
                             <br>
+                            
                         <% }) %>
-                        <p>Datos usuarios = <%= item.usuario %></p><br>
-                        <p class="shop-item-price">$<%= item.total / 100%></p><br>
+                        
+                        <span class="pedidos-item">Datos usuarios = <%= item.usuario %> </span>
+                        <p class="pedidos-item"> Total = $<%= item.total / 100%></p>
+                        <button class="btn btn-primary shop-item-button" type="button">ENTREGADO <i class="em em---1"  aria-role="presentation" aria-label="DROOLING FACE"></i></button>
+                   
                     </div>
                 </div>
+                
                 <% }) %>
             </div>
 

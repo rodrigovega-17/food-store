@@ -342,6 +342,38 @@ background-color: rgba(255, 255, 255, .3);
     font-size: 1.1em;
 }
 
+.cards {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid rgb(189, 189, 189);
+    padding: 2rem;
+    width: 20rem;
+    height: 30rem;
+    margin: 1rem;
+    border-radius: 0.2rem;
+  }
+
+  .items {
+    display: flex;
+    width: 100%;
+    padding: 2rem;
+    flex-wrap: wrap;
+  }
+
+.pedidos-item{
+    font-weight: bold;
+    font-size: 20px;
+    color: black;
+    margin-right: 20px;
+    text-align: center
+}
+.pedidos-forms{
+    width: 255px;
+    padding: 25px 0;
+    margin: 0;
+    float: left;
+  }
+
 .btn-purchase {
     display: block;
     margin: 40px auto 80px auto;
