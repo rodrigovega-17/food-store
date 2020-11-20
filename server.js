@@ -33,14 +33,14 @@ MongoClient.connect(url, function (err, db) {
     res.sendFile("/public/login.html", { root: __dirname });
   });
 
-  app.get("/store", auth, async function (req, res) {
+  app.get("/store", async function (req, res) {
     let datos = {
       food: "",
       drinks: "",
     };
     datos["food"] = await getDatos("food");
     datos["drinks"] = await getDatos("beverage");
-    console.log(datos);
+    //console.log(datos);
     res.render("store.ejs", {
       stripePublicKey: stripePublicKey,
       items: datos,
@@ -65,7 +65,7 @@ MongoClient.connect(url, function (err, db) {
     );
   }
 
-  function findDatos(data) {
+  async function findDatos(data) {
     return new Promise((resolve, reject) =>
       dbo
         .collection(data.collection)
@@ -74,52 +74,67 @@ MongoClient.connect(url, function (err, db) {
           if (err) {
             reject(err);
           } else {
-            console.log("result: ", result);
+            //console.log("result: ", result);
             resolve(result);
           }
         })
     );
   }
 
+  app.post("/additem", async function (req, res) {
+    collection = req.body.data.collection;
+    let data = {
+      name: req.body.data.name,
+      price: req.body.data.price,
+    };
+    console.log(data, collection);
+    saveDB(data, collection);
+    res.send("OK?");
+  });
+
   app.post("/login", async function (req, res) {
     let query = {
       collection: "users",
-      email: req.body.email,
-      password: req.body.password,
+      email: req.body.data.email,
+      password: req.body.data.password,
     };
-    console.log(query);
+    //console.log(query);
     const user = await findDatos(query);
-    //console.log("found: ", emailExist);
+    //console.log("found: ", user);
     if (user.length == 0) {
       return res.status(400).send("Email no existe");
     }
-    const validPass = await bcrypt.compare(req.body.password, user[0].password);
+    const validPass = await bcrypt.compare(
+      req.body.data.password,
+      user[0].password
+    );
     if (!validPass) {
       return res.status(400).send("Contraseña incorrecta");
     }
-    const token = jwt.sign({ email: user.email }, process.env.TOKEN_SECRET);
-    console.log("token = ", token);
-    res.header("auth-token", token).send(token).render("pedidos", {
-      token,
-    });
+    const token = jwt.sign({ email: user[0].email }, process.env.TOKEN_SECRET);
+    //console.log("token = ", token);
+    res.send(token);
+    // res.header("auth-token", token).send(token).render("pedidos", {
+    //   token,
+    // });
   });
 
-  function auth(req, res, next) {
-    const token = req.header("auth-token");
-    //const token = req.query.token;
-    console.log("token function = ", token);
-    console.log(req.header);
-    if (!token) {
-      return res.status(401).send("Access Denied");
-    }
-    try {
-      const verified = jwt.verify(token, process.env.TOKEN_SECRET);
-      req.user = verified;
-      next();
-    } catch (err) {
-      res.status(400);
-    }
-  }
+  // function auth(req, res, next) {
+  //   //const token = req.query.token;
+  //   console.log("auth", req.headers.token);
+  //   const token = req.headers.token;
+
+  //   if (!token) {
+  //     return res.status(401).send("Access Denied");
+  //   }
+  //   try {
+  //     const verified = jwt.verify(token, process.env.TOKEN_SECRET);
+  //     req.user = verified;
+  //     next();
+  //   } catch (err) {
+  //     res.status(400);
+  //   }
+  // }
 
   app.post("/register", async function (req, res) {
     const salt = await bcrypt.genSalt(10);
@@ -135,10 +150,25 @@ MongoClient.connect(url, function (err, db) {
 
   app.get("/pedidos", async function (req, res) {
     datos2 = await getDatos("pedidos");
-    console.log(datos2);
+    //console.log(datos2);
     res.render("pedidos.ejs", {
       pedidos: datos2,
     });
+  });
+
+  app.get("/autorizacion", async (req, res) => {
+    console.log("auth", req.headers.token);
+    const token = req.headers.token;
+    if (!token) {
+      res.status(400).send("FALSE");
+    }
+    try {
+      const verified = jwt.verify(token, process.env.TOKEN_SECRET);
+      req.user = verified;
+      res.send("true");
+    } catch (err) {
+      res.status(400).send("FALSE");
+    }
   });
 
   app.post("/purchase", function (req, res) {
@@ -149,7 +179,7 @@ MongoClient.connect(url, function (err, db) {
         const itemsJson = JSON.parse(data);
         const itemsArray = itemsJson.food.concat(itemsJson.drinks);
         let total = 0;
-        console.log(req.body.items);
+        //console.log(req.body.items);
         req.body.items.forEach(function (item) {
           const itemJson = itemsArray.find(function (i) {
             return i.id == item.id;
@@ -164,7 +194,7 @@ MongoClient.connect(url, function (err, db) {
             currency: "usd",
           })
           .then(function () {
-            console.log("Charge Successful");
+            //console.log("Charge Successful");
             res.json({ message: "Successfully purchased items" });
             dataPedido = {
               items: req.body.items,
@@ -174,7 +204,7 @@ MongoClient.connect(url, function (err, db) {
             saveDB(dataPedido, "pedidos");
           })
           .catch(function () {
-            console.log("Charge Fail");
+            //console.log("Charge Fail");
             res.status(500).end();
           });
       }
