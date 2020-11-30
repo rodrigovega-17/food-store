@@ -47,6 +47,7 @@ var stripeHandler = StripeCheckout.configure({
         quantity: quantity,
       });
     }
+    console.log("cliente token", localStorage.getItem("TOKEN"));
     fetch("/purchase", {
       method: "POST",
       headers: {
@@ -56,6 +57,7 @@ var stripeHandler = StripeCheckout.configure({
       body: JSON.stringify({
         stripeTokenId: token.id,
         items: items,
+        userToken: localStorage.getItem("TOKEN"),
       }),
     })
       .then(function (res) {

@@ -15,6 +15,29 @@ const stripe = require("stripe")(stripeSecretKey);
 const bodyParser = require("body-parser");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const multer = require("multer");
+
+//define storage for the images
+
+const storage = multer.diskStorage({
+  //destination for files
+  destination: function (request, file, callback) {
+    callback(null, "./public/images");
+  },
+
+  //add back the extension
+  filename: function (request, file, callback) {
+    callback(null, file.originalname);
+  },
+});
+
+//upload parameters for multer
+const upload = multer({
+  storage: storage,
+  limits: {
+    fieldSize: 1024 * 1024 * 3,
+  },
+});
 
 app.set("view engine", "ejs");
 app.use(express.json());
@@ -81,11 +104,13 @@ MongoClient.connect(url, function (err, db) {
     );
   }
 
-  app.post("/additem", async function (req, res) {
-    collection = req.body.data.collection;
+  app.post("/additem", upload.single("image"), async function (req, res) {
+    console.log(req.body);
+    collection = req.body.collection;
     let data = {
-      name: req.body.data.name,
-      price: req.body.data.price,
+      name: req.body.name,
+      price: req.body.price,
+      imgName: req.file.filename,
     };
     console.log(data, collection);
     saveDB(data, collection);
@@ -165,14 +190,35 @@ MongoClient.connect(url, function (err, db) {
     try {
       const verified = jwt.verify(token, process.env.TOKEN_SECRET);
       req.user = verified;
-      res.send("true");
+      res.send(verified);
     } catch (err) {
       res.status(400).send("FALSE");
     }
   });
 
-  app.post("/purchase", function (req, res) {
-    fs.readFile("items.json", function (error, data) {
+  async function getEmailConToken(token) {
+    const user = jwt.verify(token, process.env.TOKEN_SECRET);
+    return user;
+  }
+
+  async function getUsuarioConEmail(data) {
+    return new Promise((resolve, reject) =>
+      dbo
+        .collection("users")
+        .find({ email: data })
+        .toArray(function (err, result) {
+          if (err) {
+            reject(err);
+          } else {
+            //console.log("result: ", result);
+            resolve(result);
+          }
+        })
+    );
+  }
+
+  app.post("/purchase", async function (req, res) {
+    fs.readFile("items.json", async function (error, data) {
       if (error) {
         res.status(500).end();
       } else {
@@ -186,7 +232,12 @@ MongoClient.connect(url, function (err, db) {
           });
           total = total + itemJson.price * item.quantity;
         });
-
+        console.log("HOLA", req.body.userToken);
+        const user = await getEmailConToken(req.body.userToken);
+        console.log("user", user);
+        const dataUsuario = await getUsuarioConEmail(user.email);
+        console.log("data user", dataUsuario);
+        console.log(dataUsuario);
         stripe.charges
           .create({
             amount: total,
@@ -199,7 +250,10 @@ MongoClient.connect(url, function (err, db) {
             dataPedido = {
               items: req.body.items,
               total: total,
-              usuario: "testing",
+              usuario: {
+                email: dataUsuario[0].email,
+                direccion: dataUsuario[0].address,
+              },
             };
             saveDB(dataPedido, "pedidos");
           })

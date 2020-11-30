@@ -8,17 +8,20 @@
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 </head>
 <body>
-    <form id="myform2">
+    <form action ="/additem" method="POST" enctype="multipart/form-data">
         <label for="name">Name:</label><br>
         <input type="text" id="name" name="name"><br>
         <label for="price">Price:</label><br>
-        <input type="number" id="price" name="price">
+        <input type="number" id="price" name="price"><br>
+        <label for="image">Escoge Imagen</label>
+        <input type="file" name="image" id="image"><br>
         <label for="collection">Collection:</label><br>
         <select id="collection" name="collection">
             <option value="food">Comida</option>
             <option value="beverage">Bebidas</option>
           </select>
         <button id="add-item" value="add-item">Add Item</button>
+
     </form>
 </body>
 </html>

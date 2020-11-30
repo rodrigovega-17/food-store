@@ -6,6 +6,7 @@ function authjs() {
       },
     })
     .then((response) => {
+      localStorage.setItem("identifier", response.data.email);
       return response;
       console.log(response);
     })
