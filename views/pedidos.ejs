@@ -1,45 +1,59 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+        <script>       
+            axios
+        .get(`http://localhost:3000/autorizacion`, {
+        headers: {
+          token: localStorage.getItem("TOKEN"),
+        },
+        })
+        .then((response) => {
+            console.log(response)
+        })
+        .catch((err) => {
+            document.location.href = "http://localhost:3000/login.html";
+        });
+        </script>
         <title>FOODSIE | MENU</title>
         <meta name="description" contet="this is the description">
         <link rel="stylesheet" href="styles.css">
         <link href="https://emoji-css.afeld.me/emoji.css" rel="stylesheet">
         <script src="https://checkout.stripe.com/checkout.js" defer></script>
-        <script>
-        </script>
     </head>
     <body>
         <header class="main-header">
             <nav class="main-nav nav">
                 <ul>
-                    <li> <a href="index.html">INICIO</a></li>
+                    <li> <a href="inicio.html">INICIO</a></li>
                     <li> <a href="store">MENU</a></li>
                     <li> <a href="about.html">NOSOTROS</a></li>
                     <li> <a href="pedidos">PEDIDOS</a></li>
-
                 </ul>
             </nav>
             <h1 class="rest-name rest-name-large">FOODSIE</h1>
         </header>
         <section class="container content-section">
             <h2 class="section-header">PEDIDOS</h2>
-                <div>
+                
                     <% pedidos.forEach(function(item) {  %>
-                        <hr>
-                <div class="shop-item" data-item-id="<%= item.id %>">
-                        <p class="shop-item-title"><%= item.id %></p>
-                    <div class="shop-item-details">
+                        <div class="pedidos-forms"></div>
+                        <div class="cards" data-item-id="<%= item.id %>" >
                         <% item.items.forEach(function(item1) {  %>
-                            <p>id = <%= item1.id %></p><br>
-                            <p>Cantidad = <%= item1.quantity %></p>
+                            
+                            <span class="pedidos-item" > id = <%= item1.id %>   </span> 
+                            <span class="pedidos-item">Cantidad = <%= item1.quantity %></span> 
                             <br>
-
+                            
                         <% }) %>
-                        <p>Datos usuarios = <%= item.usuario %></p><br>
-                        <p class="shop-item-price">$<%= item.total / 100%></p><br>
+                        
+                        <span class="pedidos-item">Datos usuarios = <%= item.usuario %> </span>
+                        <p class="pedidos-item"> Total = $<%= item.total / 100%></p>
+                        <center><img class="pedidos-item-image" src="https://i.imgur.com/W2TCe9k.jpg"></center>
                     </div>
                 </div>
+                
                 <% }) %>
             </div>
 

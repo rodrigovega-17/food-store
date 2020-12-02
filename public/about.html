@@ -1,6 +1,22 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+        <script>       
+            axios
+        .get(`http://localhost:3000/autorizacion`, {
+        headers: {
+          token: localStorage.getItem("TOKEN"),
+        },
+        })
+        .then((response) => {
+            console.log(response.email)
+  
+        })
+        .catch((err) => {
+            document.location.href = "http://localhost:3000/login.html";
+        });
+        </script>
         <title>Foodsie | Nosotros</title>
         <meta name="description" contet="this is the description">
         <link rel="stylesheet" href="styles.css">
@@ -9,7 +25,7 @@
         <header class="main-header">
             <nav class="nav main-nav">
                 <ul>
-                    <li> <a href="index.html">INICIO</a></li>
+                    <li> <a href="inicio.html">INICIO</a></li>
                     <li> <a href="store">MENU</a></li>
                     <li> <a href="about.html">NOSOTROS</a></li>
                     <li> <a href="pedidos">PEDIDOS</a></li>
