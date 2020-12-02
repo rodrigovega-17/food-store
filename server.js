@@ -107,14 +107,20 @@ MongoClient.connect(url, function (err, db) {
   app.post("/additem", upload.single("image"), async function (req, res) {
     console.log(req.body);
     collection = req.body.collection;
+    // const items = await getDatos(collection);
+    const itemsJsonDB = await getDatos("food");
+    const itemsJson2DB = await getDatos("beverage");
+    //const itemsJson = JSON.parse(data);
+    const itemsArray = itemsJsonDB.concat(itemsJson2DB);
+    const nextID = itemsArray.length + 1;
     let data = {
+      id: nextID,
       name: req.body.name,
-      price: req.body.price,
+      price: req.body.price * 100,
       imgName: req.file.filename,
     };
     console.log(data, collection);
     saveDB(data, collection);
-    res.send("OK?");
   });
 
   app.post("/login", async function (req, res) {
@@ -162,6 +168,7 @@ MongoClient.connect(url, function (err, db) {
   // }
 
   app.post("/register", async function (req, res) {
+    console.log("Hola?");
     const salt = await bcrypt.genSalt(10);
     const hashPassword = await bcrypt.hash(req.body.password, salt);
     let user = {
@@ -170,12 +177,10 @@ MongoClient.connect(url, function (err, db) {
       address: req.body.address,
     };
     saveDB(user, "users");
-    res.send("CREADO");
   });
 
   app.get("/pedidos", async function (req, res) {
     datos2 = await getDatos("pedidos");
-    //console.log(datos2);
     res.render("pedidos.ejs", {
       pedidos: datos2,
     });
@@ -196,6 +201,24 @@ MongoClient.connect(url, function (err, db) {
     }
   });
 
+  app.get("/autorizacionAdmin", async (req, res) => {
+    console.log("auth", req.headers.token);
+    const token = req.headers.token;
+    if (!token) {
+      res.status(400).send("FALSE");
+    }
+    try {
+      const verified = jwt.verify(token, process.env.TOKEN_SECRET);
+      req.user = verified;
+      if (verified.email == "admin@admin.com") {
+        res.send(verified);
+      } else {
+        res.status(400).send("FALSE");
+      }
+    } catch (err) {
+      res.status(400).send("FALSE");
+    }
+  });
   async function getEmailConToken(token) {
     const user = jwt.verify(token, process.env.TOKEN_SECRET);
     return user;
@@ -218,51 +241,54 @@ MongoClient.connect(url, function (err, db) {
   }
 
   app.post("/purchase", async function (req, res) {
-    fs.readFile("items.json", async function (error, data) {
-      if (error) {
-        res.status(500).end();
-      } else {
-        const itemsJson = JSON.parse(data);
-        const itemsArray = itemsJson.food.concat(itemsJson.drinks);
-        let total = 0;
-        //console.log(req.body.items);
-        req.body.items.forEach(function (item) {
-          const itemJson = itemsArray.find(function (i) {
-            return i.id == item.id;
-          });
-          total = total + itemJson.price * item.quantity;
-        });
-        console.log("HOLA", req.body.userToken);
-        const user = await getEmailConToken(req.body.userToken);
-        console.log("user", user);
-        const dataUsuario = await getUsuarioConEmail(user.email);
-        console.log("data user", dataUsuario);
-        console.log(dataUsuario);
-        stripe.charges
-          .create({
-            amount: total,
-            source: req.body.stripeTokenId,
-            currency: "usd",
-          })
-          .then(function () {
-            //console.log("Charge Successful");
-            res.json({ message: "Successfully purchased items" });
-            dataPedido = {
-              items: req.body.items,
-              total: total,
-              usuario: {
-                email: dataUsuario[0].email,
-                direccion: dataUsuario[0].address,
-              },
-            };
-            saveDB(dataPedido, "pedidos");
-          })
-          .catch(function () {
-            //console.log("Charge Fail");
-            res.status(500).end();
-          });
-      }
+    const itemsJsonDB = await getDatos("food");
+    const itemsJson2DB = await getDatos("beverage");
+    //const itemsJson = JSON.parse(data);
+    const itemsArray = itemsJsonDB.concat(itemsJson2DB);
+    let total = 0;
+    //console.log(req.body.items);
+    req.body.items.forEach(function (item) {
+      const itemJson = itemsArray.find(function (i) {
+        return i.id == item.id;
+      });
+      total = total + itemJson.price * item.quantity;
     });
+    req.body.items.forEach(function (item) {
+      const itemJson = itemsArray.find(function (i) {
+        return i.id == item.id;
+      });
+      item.description = itemJson.name;
+    });
+
+    console.log("HOLA", req.body.items);
+    const user = await getEmailConToken(req.body.userToken);
+    console.log("user", user);
+    const dataUsuario = await getUsuarioConEmail(user.email);
+    console.log("data user", dataUsuario);
+    console.log(dataUsuario);
+    stripe.charges
+      .create({
+        amount: total,
+        source: req.body.stripeTokenId,
+        currency: "usd",
+      })
+      .then(function () {
+        //console.log("Charge Successful");
+        res.json({ message: "Successfully purchased items" });
+        dataPedido = {
+          items: req.body.items,
+          total: total,
+          usuario: {
+            email: dataUsuario[0].email,
+            direccion: dataUsuario[0].address,
+          },
+        };
+        saveDB(dataPedido, "pedidos");
+      })
+      .catch(function () {
+        //console.log("Charge Fail");
+        res.status(500).end();
+      });
   });
 });
 app.listen(3000);

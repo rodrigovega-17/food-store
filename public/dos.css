@@ -1,0 +1,226 @@
+@import url("https://fonts.googleapis.com/css?family=Raleway:300,400");
+@import url("https://fonts.googleapis.com/css2?family=Medula+One");
+
+* {
+  box-sizing: border-box;
+  font-family: Raleway;
+  color: #777;
+}
+.crud {
+  border: 100px solid #e1e1e1;
+  border-radius: 20px;
+  background: rgba(0, -0, -0, -0.1);
+  padding: 10px;
+  width: 500px;
+  border-width: 1px;
+  position: absolute;
+  top: 150%;
+  left: 35%;
+  background-color: #ffffff;
+}
+.items {
+  display: flex;
+  width: 100%;
+  padding: 2rem;
+  flex-wrap: wrap;
+}
+
+.pedidos {
+  border: 1px solid rgb(189, 189, 189);
+  padding: 2rem;
+  width: 10rem;
+  height: 15rem;
+  margin: 1rem;
+  border-radius: 0.2rem;
+  flex-wrap: wrap;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  position: relative;
+  background-size: cover;
+  background-attachment: fixed;
+
+  background-image: url("Images/foodsie-background.jpg");
+}
+.crud h1 {
+  margin: 0;
+  padding: 0 0 20px;
+  text-align: center;
+  font-size: 50px;
+  color: black;
+}
+
+.crud h2 {
+  margin: 0;
+  padding: 0 0 20px;
+  text-align: center;
+  font-size: 50px;
+  color: black;
+}
+
+.crud label {
+  margin: 0;
+  padding: 0;
+  font-weight: bold;
+  display: block;
+  color: black;
+}
+
+.crud p {
+  margin: 0;
+  padding: 0;
+  font-weight: bold;
+  display: block;
+  color: #000000;
+}
+
+.crud input {
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.crud ::placeholder {
+  color: black;
+}
+.crud input[type="text"],
+.crud input[type="password"],
+.crud input[type="number"] {
+  border: none;
+  border-bottom: 1px solid #fff;
+  background: transparent;
+  outline: none;
+  height: 40px;
+  color: black;
+  font-size: 16px;
+}
+
+.crud select {
+  border: none;
+  border-bottom: 1px solid #fff;
+  background: transparent;
+  outline: none;
+  height: 40px;
+  color: black;
+  font-size: 16px;
+}
+
+.crud input[type="submit"] {
+  border: none;
+  width: 100%;
+  font-size: 20px;
+  padding: 15px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  background-color: chartreuse;
+  color: black;
+}
+
+.crud button {
+  border: none;
+  width: 100%;
+  font-size: 20px;
+  padding: 15px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  background-color: chartreuse;
+  color: black;
+}
+
+.main-header {
+  background-image: url("Images/foodsie-background.jpg");
+  background-size: contain;
+  background-color: rgba(0, 0, 0, 0.6);
+  background-blend-mode: multiply;
+  padding-bottom: 30px;
+}
+
+.nav a {
+  display: inline-block;
+  padding: 0.5em;
+  color: white;
+  text-decoration: none;
+}
+
+.footer-nav li {
+  padding: 0 0.5em;
+}
+
+.footer-nav img {
+  width: 30px;
+  height: 30px;
+}
+
+.main-nav {
+  text-align: center;
+  font-size: 1.1em;
+  font-weight: lighter;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.main-nav li {
+  padding: 0 5%;
+}
+.rest-name {
+  text-align: center;
+  margin: 0;
+  font-size: 4em;
+  font-family: "Medula One";
+  font-weight: normal;
+  color: white;
+}
+
+.rest-name-large {
+  font-size: 8rem;
+}
+
+.btn-header {
+  color: white;
+  border: 2px solid #f2c856;
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 0;
+  font-size: 1.5em;
+  font-weight: lighter;
+  padding-left: 2em;
+  padding-right: 2em;
+  margin: 0 auto;
+  display: block;
+}
+
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 1.5em;
+}
+
+.main-footer {
+  background-color: #f2c856;
+  color: white;
+  padding: 0.25em 0;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  position: fixed;
+  overflow: hidden;
+  right: 0;
+  z-index: 9999;
+}
+
+.main-footer-container {
+  display: flex;
+  align-items: center;
+}
+
+.main-footer-container ul {
+  flex-grow: 1;
+  text-align: end;
+}
+
+.nav ul {
+  margin: 0;
+}
+
+.nav li {
+  display: inline;
+}

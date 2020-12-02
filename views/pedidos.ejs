@@ -4,7 +4,7 @@
         <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
         <script>       
             axios
-        .get(`http://localhost:3000/autorizacion`, {
+        .get(`http://localhost:3000/autorizacionAdmin`, {
         headers: {
           token: localStorage.getItem("TOKEN"),
         },
@@ -36,26 +36,31 @@
         </header>
         <section class="container content-section">
             <h2 class="section-header">PEDIDOS</h2>
-                
+            <p> <a href="/crud.html">Agregar item</a> </p> 
+
+                <div class="items">
                     <% pedidos.forEach(function(item) {  %>
-                        <div class="pedidos-forms"></div>
-                        <div class="cards" data-item-id="<%= item.id %>" >
+                        <div class="cards pedidos" data-item-id="<%= item.id %>" >
                         <% item.items.forEach(function(item1) {  %>
                             
                             <span class="pedidos-item" > id = <%= item1.id %>   </span> 
+                            <span class="pedidos-item" > Nombre = <%= item1.description %>   </span> 
                             <span class="pedidos-item">Cantidad = <%= item1.quantity %></span> 
                             <br>
                             
                         <% }) %>
                         
-                        <span class="pedidos-item">Datos usuarios = <%= item.usuario %> </span>
+                        <span class="pedidos-item">Email usuario = <%= item.usuario.email %> </span>
+                        <span class="pedidos-item">Dirección usuario = <%= item.usuario.direccion %> </span>
+
                         <p class="pedidos-item"> Total = $<%= item.total / 100%></p>
                         <center><img class="pedidos-item-image" src="https://i.imgur.com/W2TCe9k.jpg"></center>
                     </div>
-                </div>
+
                 
                 <% }) %>
             </div>
+            
 
         </section>
 

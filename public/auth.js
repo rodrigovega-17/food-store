@@ -14,3 +14,11 @@ function authjs() {
       document.location.href = "http://localhost:3000/login.html";
     });
 }
+document.addEventListener("DOMContentLoaded", (_) => {
+  document.getElementById("Logout").addEventListener("click", handleLogout);
+});
+
+function handleLogout() {
+  localStorage.setItem("TOKEN", "");
+  document.location.href = "http://localhost:3000/login.html";
+}

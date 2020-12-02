@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", (_) => {
   form = document.getElementById("myform");
-  document.getElementById("redirect").addEventListener("click", handleRedirect);
+  // document.getElementById("redirect").addEventListener("click", handleRedirect);
   form.addEventListener("submit", handleSubmit);
 });
 

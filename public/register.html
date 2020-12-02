@@ -3,17 +3,56 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
+    <title>Register</title>
+
+
+    <meta name="description" contet="this is the description">
+    <link rel="stylesheet" href="dos.css">
 </head>
 <body>
-    <form action="/register" method = "POST">
+
+    <header class="main-header">
+        <nav class="nav main-nav">
+            <ul>
+                <li> <a href="inicio.html">INICIO</a></li>
+                <li> <a href="store">MENU</a></li>
+                <li> <a href="about.html">NOSOTROS</a></li>
+                <li> <a href="pedidos">PEDIDOS</a></li>
+            </ul>
+        </nav>
+        <h1 class="rest-name rest-name-large" >FOODSIE</h1>
+    </header>
+
+
+
+    <form action="/register" method = "POST" class="crud" >
+        <h1>Register</h1>
         <label for="email">Email:</label><br>
-        <input type="text" id="email" name="email"><br>
+        <input class="control" type="text"  id="email" name="email"><br>
         <label for="password">Password:</label><br>
-        <input type="text" id="password" name="password">
+        <input class="control" type="text"  id="password" name="password"><br>
         <label for="address">Address:</label><br>
-        <input type="text" id="address" name="address">
-        <input type="submit" value="Login">
+        <input class="control" type="text"  id="address" name="address"><br>
+        <br>
+        <input class="control" type="submit" value="Register">
+
+        <p> Al registrarte, aceptas nuestras Condiciones de uso y Politicas de privacidad.</p>
+         <p>¿Ya tienes una cuenta ? <a href="login.html">Iniciar sesion</a></p> 
+         <br>
+         <br>
+         <br>
+         <br>
     </form>
+
+    <footer class="main-footer">
+        <div class="container main-footer-container">
+            <h3 class="rest-name">FOODSIE</h3>
+            <ul class="nav footer-nav">
+                <li><img src="Images/YouTube Logo.png"></li>
+                <li><img src="Images/Spotify Logo.png"></li>
+                <li><img src="Images/Facebook Logo.png"></li>
+            </ul>
+        </div>
+    </footer>
 </body>
 </html>
